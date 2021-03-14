@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>My test page</title>
+  </head>
+  <body>
+    {% if wordlist %}
+      <ul>
+        {% for word in wordlist %}
+          <li>{{ word }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>単語が抽出されませんでした</p>
+    {% endif %}
+  </body>
+</html>

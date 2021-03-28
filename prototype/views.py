@@ -6,6 +6,9 @@ from django.http import HttpResponse
 from django.template import loader
 import requests
 from bs4 import BeautifulSoup
+import time
+from selenium import webdriver
+import chromedriver_binary
 
 
 def index(request):
@@ -28,11 +31,29 @@ def analysis(request):
         'wordlist': wordlist,
     }
     return HttpResponse(template.render(context, request))
-    # return HttpResponse(wordlist)
 
 
 def scraping(request):
-    site = requests.get(
-        'https://www.nhk.or.jp/school/program/')
-    data = BeautifulSoup(site.content, 'lxml')
-    return HttpResponse(data.find('a').get('href'))
+
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(options=options)
+
+    link_list = []
+    link_title_list = []
+
+    for i in range(1):
+        url = 'https://www.nhk.or.jp/school/keyword/?kyoka=rika&grade=g5&cat=all&from={}&sort=ranking'.format(
+            i*20+1)
+        driver.get(url)
+        html = driver.page_source.encode('utf-8')
+        soup = BeautifulSoup(html, "html.parser")
+        for link in soup.select('div.itemKyouka > a'):
+            link_list.append(link.get('href'))
+        time.sleep(1)
+
+    template = loader.get_template('prototype/scraping.html')
+    context = {
+        'linklist': link_list,
+    }
+    return HttpResponse(template.render(context, request))

@@ -5,14 +5,10 @@
     <title>My test page</title>
   </head>
   <body>
-    {% if linklist %}
-      <ul>
-        {% for link in linklist %}
-          <a href="{{link}}" target="_blank" rel="noopener noreferrer">a</a>
-        {% endfor %}
-      </ul>
+    {% if link_list %}
+      {{link_list}}
     {% else %}
-      <p>単語が抽出されませんでした</p>
+      <p>結果無し</p>
     {% endif %}
   </body>
 </html>
